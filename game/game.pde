@@ -1,6 +1,6 @@
 class Card {
   int x, y;
-  color iro, omote, ura;
+  color cardColor, table, back;
   boolean cardClicked = false;
 
   Card(int x0, int y0) {
@@ -9,13 +9,18 @@ class Card {
   }
 
   void display() {
-    fill(iro);
+    fill(cardColor);
     rect(x, y, 50, 60);
+  }
+  
+  void isInside() {
+    if(mouseX >= x && mouseX <= x + 50 && mouseY >= y && mouseY <= y + 60) cardClicked = true;
   }
 
   void changeColor() {
-    if (!cardClicked)iro = omote;
-    else iro = ura;
+    isInside();
+    if (!cardClicked)cardColor = table;
+    else cardColor = back;
   }
 }
 
