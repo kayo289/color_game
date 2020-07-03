@@ -27,6 +27,4 @@ void setup() {
 
 void draw() {
   background(255);
-  Button testb = new Button(#ff0000, 100, 100, 100, 25, "hello world");
-  testb.display(#000000, 100, 100, 100, 25);
 }
