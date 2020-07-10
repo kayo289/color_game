@@ -14,7 +14,7 @@ class Button {
   void display(color text_color,int text_x, int text_y, int text_size) {
     fill(text_color);
     textSize(text_size);
-    text("Color Matching Game", text_x, text_y);
+    text(msg, text_x, text_y);
     fill(buttonColor);
     rect(x, y, w, h);
   }
