@@ -1,5 +1,5 @@
 class Card {
-  int x, y,sizeX = 80,sizeY = 120;
+  int x, y, sizeX = 80, sizeY = 120;
   color cardColor, table, back;
   boolean cardClicked = false;
   boolean make_pair  = false;
@@ -23,18 +23,19 @@ class Card {
 
   int changeColor(int mx, int my) {
     if (!make_pair) {
-      isInside(mx,my);
+      isInside(mx, my);
       if (cardClicked) {
         cardColor = table;
         return 1;
       }
-        return 0;
-      }
+      return 0;
+    }
     return 0;
   }
 
   void refreshCard() {
     if (!make_pair) cardColor = back;
+    cardClicked = false;
   }
 }
 
@@ -61,9 +62,14 @@ class Button {
 }
 
 Card[] c = new Card[10];
+int count = 0;
+int[] tmp = new int[2];
+
 
 void setup() {
   size(500, 500);
+  tmp[0] = -1;
+  tmp[1] = -1;
   color ori = color(random(200), random(200), random(200));
   color[] colData = new color[10];
   for (int i = 0; i < colData.length; i += 2) {
@@ -92,31 +98,44 @@ void draw() {
 }
 
 void game_screen() {
-  
-  int count = 0;
-  int[] tmp = new int[2];
-  int cardClicked = 0;
-
   background(255);
   for (int i = 0; i < c.length; i ++) {
     c[i].display();
 
-    if (mousePressed) {
-      cardClicked= c[i].changeColor(mouseX, mouseY);
-      if (cardClicked == 1) {
-        tmp[count] = i;
-        count ++;
-      }
-    }
-
-    if (count == 2) {
+    if (count >= 2) {
       if (c[tmp[0]].table == c[tmp[1]].table) {
         c[tmp[0]].make_pair = true;
         c[tmp[1]].make_pair = true;
       } else {
-        c[i].refreshCard();
+        int second = 0;
+        while(second <= 1000) {
+          second ++;
+        }
+        c[tmp[0]].refreshCard();
+        c[tmp[1]].refreshCard();
+        println("in");
       }
       count = 0;
+      tmp[0] = -1;
+      tmp[1] = -1;
+    }
+  }
+  println(count);
+}
+
+void mouseClicked() {
+  if (count < 2) {
+    for (int i = 0; i < c.length; i ++) {
+      int cardClicked = 0;
+
+      cardClicked = c[i].changeColor(mouseX, mouseY);
+      if (cardClicked == 1) {
+        if (count == 1 && tmp[0] != i || count == 0) {
+          tmp[count] = i;
+          count ++;
+        }
+        println(tmp[0], tmp[1], count);
+      }
     }
   }
 }
