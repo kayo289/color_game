@@ -1,3 +1,29 @@
+class Card {
+  int x, y;
+  color cardColor, table, back;
+  boolean cardClicked = false;
+
+  Card(int x0, int y0) {
+    x = x0;
+    y = y0;
+  }
+
+  void display() {
+    fill(cardColor);
+    rect(x, y, 50, 60);
+  }
+  
+  void isInside() {
+    if(mouseX >= x && mouseX <= x + 50 && mouseY >= y && mouseY <= y + 60) cardClicked = true;
+  }
+
+  void changeColor() {
+    isInside();
+    if (!cardClicked)cardColor = table;
+    else cardColor = back;
+  }
+}
+
 class Button {
   int x, y, w, h;
   color buttonColor;
@@ -26,6 +52,7 @@ class Button {
     }
   }
 }
+
 
 void displayRecord( String message, float rectY) {
   int rectX = width/4;
@@ -66,6 +93,7 @@ void finalPage() {
     change = 0;
   }
 }
+
 
 Button b_start, b_final;
 int rectW = 200;
