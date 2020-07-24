@@ -26,9 +26,9 @@ class Card {
       isInside(mx, my);
       if (cardClicked) {
         cardColor = table;
+        display();
         return 1;
       }
-      return 0;
     }
     return 0;
   }
@@ -93,34 +93,28 @@ void setup() {
 
 void draw() {
   background(255);
-
   game_screen();
 }
 
 void game_screen() {
+
   background(255);
   for (int i = 0; i < c.length; i ++) {
     c[i].display();
-
     if (count >= 2) {
       if (c[tmp[0]].table == c[tmp[1]].table) {
         c[tmp[0]].make_pair = true;
         c[tmp[1]].make_pair = true;
       } else {
-        int second = 0;
-        while(second <= 1000) {
-          second ++;
-        }
+        delay(3000);
         c[tmp[0]].refreshCard();
         c[tmp[1]].refreshCard();
-        println("in");
       }
       count = 0;
       tmp[0] = -1;
       tmp[1] = -1;
     }
   }
-  println(count);
 }
 
 void mouseClicked() {
@@ -134,7 +128,6 @@ void mouseClicked() {
           tmp[count] = i;
           count ++;
         }
-        println(tmp[0], tmp[1], count);
       }
     }
   }
