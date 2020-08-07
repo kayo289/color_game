@@ -45,7 +45,6 @@ class Button {
   int x, y, w, h;
   color buttonColor;
   String msg;
-
   Button(color col, int xpos, int ypos, int wpos, int hpos, String msgpos) {
     buttonColor = col;
     x = xpos;
@@ -54,22 +53,82 @@ class Button {
     h = hpos;
     msg = msgpos;
   }
-  void display(color text_color, int text_x, int text_y, int text_w, int text_h, int text_size) {
-    fill(text_color);
-    textSize(text_size);
-    text("Color Matching Game", x, y);
+  void display(color text_color, int text_x, int text_y, int text_size) { 
     fill(buttonColor);
     rect(x, y, w, h);
+    fill(text_color);
+    textSize(text_size);
+    fill(0);
+    text(msg, text_x, text_y);
+  }
+  boolean isClicked() {
+    if (mousePressed == true && (( x < mouseX && mouseX < x+w)&&(y < mouseY && mouseY < y+h))) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
+
+
+void displayRecord( String message, float rectY) {
+  int rectX = width/4;
+  int rectW = width/2;
+  int rectH = height/10;
+  //display Box
+  fill(136, 136, 136);
+  rect(rectX, rectY, rectW, rectH);
+  //display Message
+  fill(0);
+  textSize(35);
+  text(message, rectX+30, rectY+height/15);
+}
+
+void startPage() {
+  background(255);
+  fill(0);
+  textSize(35);
+  text("Color Matching Game", width/4, height/3);
+  b_start.display(255, rectX+50, rectY+40, 35);
+
+  if (b_start.isClicked()) {
+    change = 1;
+  }
+}
+
+void finalPage() {
+  background(255);
+  int nowRec = 0; //now record
+  int bestRec = 0; //best record
+  fill(0);
+  textSize(35);
+  displayRecord("now record : "+nowRec+"sec", height/4);
+  displayRecord(" your Best : "+bestRec+"sec", height/2);
+  b_final.display(255, rectX-15, rectY+270, 35);
+
+  if (b_final.isClicked()) {
+    change = 0;
+  }
+}
+
+
+Button b_start, b_final;
+int rectW = 200;
+int rectH = 50;
+int rectX = (700/2)-(rectW/2);
+int rectY = 900/2;
+int change = 0;
 
 Card[] c = new Card[10];
 int count = 0;
 int[] tmp = new int[2];
 
-
 void setup() {
   size(700, 850);
+  color a = color(#FAFF08);
+  b_start = new Button(a, rectX, rectY, rectW, rectH, "START");
+  b_final = new Button(a, rectX-30, rectY+225, rectW+80, rectH+20, "One more time");
+
   tmp[0] = -1;
   tmp[1] = -1;
   color ori = color(random(200), random(200), random(200));
@@ -86,7 +145,7 @@ void setup() {
       do {
         tmp = int(random(10));
       } while (used[tmp]);
-      c[cnt] = new Card(width/4*j+25, height / 3 + i + height / 8 , colData[tmp]);
+      c[cnt] = new Card(width/4*j+25, height / 3 * i + height / 8, colData[tmp]);
       used[tmp] = true;
       cnt ++;
     }
@@ -95,7 +154,13 @@ void setup() {
 
 void draw() {
   background(255);
-  game_screen();
+  if (change == 0) {
+    startPage();
+  } else if (change == 1) {
+    game_screen();
+  } else {
+    finalPage();
+  }
 }
 
 void game_screen() {
@@ -117,18 +182,23 @@ void game_screen() {
       tmp[1] = -1;
     }
   }
+  int m;
+  for(m = 0; m < c.length && c[m].make_pair; m++);
+  if(m == c.length) change = 2;
 }
 
 void mouseClicked() {
-  if (count < 2) {
-    for (int i = 0; i < c.length; i ++) {
-      int cardClicked = 0;
+  if (change == 1) {
+    if (count < 2) {
+      for (int i = 0; i < c.length; i ++) {
+        int cardClicked = 0;
 
-      cardClicked = c[i].changeColor(mouseX, mouseY);
-      if (cardClicked == 1) {
-        if (count == 1 && tmp[0] != i || count == 0) {
-          tmp[count] = i;
-          count ++;
+        cardClicked = c[i].changeColor(mouseX, mouseY);
+        if (cardClicked == 1) {
+          if (count == 1 && tmp[0] != i || count == 0) {
+            tmp[count] = i;
+            count ++;
+          }
         }
       }
     }
