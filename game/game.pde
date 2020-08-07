@@ -70,6 +70,20 @@ class Button {
   }
 }
 
+class Timer {
+  int start_time;
+  int s;
+  void begin() {
+    int ms = millis()/1000;
+    start_time = ms;
+    s = 0;
+  }
+  void done() {
+    int ms = millis()/1000;
+    s = ms - start_time;
+  }
+}
+
 
 void displayRecord( String message, float rectY) {
   int rectX = width/4;
@@ -93,21 +107,25 @@ void startPage() {
 
   if (b_start.isClicked()) {
     change = 1;
+    time.begin();
   }
 }
 
+int bestRec = 0; //best record
 void finalPage() {
   background(255);
-  int nowRec = 0; //now record
-  int bestRec = 0; //best record
+  int nowRec = time.s; //now record
   fill(0);
   textSize(35);
+  if (bestRec == 0 || nowRec < bestRec) bestRec = nowRec; 
+
   displayRecord("now record : "+nowRec+"sec", height/4);
   displayRecord(" your Best : "+bestRec+"sec", height/2);
   b_final.display(255, rectX-15, rectY+270, 35);
 
   if (b_final.isClicked()) {
     change = 0;
+    setup();
   }
 }
 
@@ -118,6 +136,7 @@ int rectH = 50;
 int rectX = (700/2)-(rectW/2);
 int rectY = 900/2;
 int change = 0;
+Timer time = new Timer();
 
 Card[] c = new Card[10];
 int count = 0;
@@ -183,8 +202,12 @@ void game_screen() {
     }
   }
   int m;
-  for(m = 0; m < c.length && c[m].make_pair; m++);
-  if(m == c.length) change = 2;
+  for (m = 0; m < c.length && c[m].make_pair; m++);
+  if (m == c.length) {
+    time.done();
+    delay(3000);
+    change = 2;
+  }
 }
 
 void mouseClicked() {
