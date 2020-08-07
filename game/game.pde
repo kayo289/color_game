@@ -69,7 +69,7 @@ int[] tmp = new int[2];
 
 
 void setup() {
-  size(700, 500);
+  size(700, 850);
   tmp[0] = -1;
   tmp[1] = -1;
   color ori = color(random(200), random(200), random(200));
@@ -86,7 +86,7 @@ void setup() {
       do {
         tmp = int(random(10));
       } while (used[tmp]);
-      c[cnt] = new Card(width/4*j+25, height / 3 *i + height / 5, colData[tmp]);
+      c[cnt] = new Card(width/4*j+25, height / 3 + i + height / 8 , colData[tmp]);
       used[tmp] = true;
       cnt ++;
     }
