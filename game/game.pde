@@ -1,5 +1,5 @@
 class Card {
-  int x, y, sizeX = 80, sizeY = 120;
+  int x, y, sizeX, sizeY;
   color cardColor, table, back;
   boolean cardClicked = false;
   boolean make_pair  = false;
@@ -7,6 +7,8 @@ class Card {
   Card(int x0, int y0, color col) {
     x = x0;
     y = y0;
+    sizeX = width / 4 - 50;
+    sizeY = height / 3 - 70;
     table = col;
     back = color(200, 100, 100);
     cardColor = back;
@@ -67,14 +69,14 @@ int[] tmp = new int[2];
 
 
 void setup() {
-  size(500, 500);
+  size(700, 500);
   tmp[0] = -1;
   tmp[1] = -1;
   color ori = color(random(200), random(200), random(200));
   color[] colData = new color[10];
   for (int i = 0; i < colData.length; i += 2) {
-    colData[i] = ori + 2400*i;
-    colData[i+1] = ori + 2400*i;
+    colData[i] = ori + 1200*i;
+    colData[i+1] = ori + 1200*i;
   }
 
   boolean[] used = new boolean[10];
@@ -84,7 +86,7 @@ void setup() {
       do {
         tmp = int(random(10));
       } while (used[tmp]);
-      c[cnt] = new Card(36+116*j, 28+148*i, colData[tmp]);
+      c[cnt] = new Card(width/4*j+25, height / 3 *i + height / 5, colData[tmp]);
       used[tmp] = true;
       cnt ++;
     }
